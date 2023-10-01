@@ -1,5 +1,7 @@
+from board import Board
+
 dictionary = {}
-board = []
+board = Board()
 board_size = 4
 results = {}
 
@@ -33,20 +35,6 @@ letters = {
 }
 
 
-class Piece:
-    def __init__(self, letter):
-        self.letter = letter
-        self.visited = False
-
-
-def print_board(board):
-    for row in board:
-        for piece in row:
-            print(piece.letter, end="")
-        print()
-    print()
-
-
 def hash_dictionary():
     f = open("dictionary.txt", "r")
     for line in f.readlines():
@@ -57,45 +45,13 @@ def hash_dictionary():
         dictionary[word] = True
 
 
-def create_board():
-    for i in range(0, board_size):
-        board.append([])
-
-    board[0].append(Piece("h"))
-    board[0].append(Piece("e"))
-    board[0].append(Piece("l"))
-    board[0].append(Piece("l"))
-
-    board[1].append(Piece("a"))
-    board[1].append(Piece("b"))
-    board[1].append(Piece("c"))
-    board[1].append(Piece("o"))
-
-    board[2].append(Piece("d"))
-    board[2].append(Piece("e"))
-    board[2].append(Piece("f"))
-    board[2].append(Piece("g"))
-
-    board[3].append(Piece("h"))
-    board[3].append(Piece("i"))
-    board[3].append(Piece("j"))
-    board[3].append(Piece("k"))
-
-    print_board(board)
-
-    # print("Insert board line by line")
-    # for i in range (0, board_size):
-    #   line = input().split()
-    #   for j in range (0, board_size):
-    #     p = Piece(line[j], 1)
-    #     board[i].append(p)
-
-
 def find_word(word, word_index, row, col, value):
     curr_letter = word[word_index]
     increase_value = lambda val: val + letters[curr_letter]
 
-    if board[row][col].visited:
+    piece = board.get_piece_at_row_col(row, col)
+
+    if piece.visited:
         return
     if word_index == len(word) - 1:
         if not word in results:
@@ -105,7 +61,7 @@ def find_word(word, word_index, row, col, value):
 
     curr_letter = word[word_index]
     # print(word, curr_letter)
-    board[row][col].visited = True
+    piece.visited = True
 
     can_go_up = row > 0
     can_go_down = row < board_size - 1
@@ -113,7 +69,8 @@ def find_word(word, word_index, row, col, value):
     can_go_right = col < board_size - 1
 
     is_next_letter_valid = (
-        lambda nextRow, nextCol: word[word_index + 1] == board[nextRow][nextCol].letter
+        lambda nextRow, nextCol: word[word_index + 1]
+        == board.get_piece_at_row_col(nextRow, nextCol).letter
     )
 
     # Up-Left
@@ -197,13 +154,14 @@ def find_word(word, word_index, row, col, value):
             increase_value(value),
         )
 
-    board[row][col].visited = False
+    piece.visited = False
 
 
 def start_find_word(word):
     for row in range(0, board_size):
         for col in range(0, board_size):
-            if board[row][col].letter == word[0]:
+            piece = board.get_piece_at_row_col(row, col)
+            if piece.letter == word[0]:
                 # print("Find word " + word)
                 find_word(
                     word,
@@ -229,6 +187,5 @@ def print_results():
 
 
 hash_dictionary()
-create_board()
 find_words()
 print_results()

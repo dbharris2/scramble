@@ -1,6 +1,7 @@
 from board import Board
+from dictionary import EnglishDictionary
 
-dictionary = {}
+dictionary = EnglishDictionary()
 board = Board()
 board_size = 4
 results = {}
@@ -33,16 +34,6 @@ letters = {
     "y": 3,
     "z": 1,
 }
-
-
-def hash_dictionary():
-    f = open("dictionary.txt", "r")
-    for line in f.readlines():
-        word = ""
-        for letter in line:
-            if letter in letters:
-                word += letter
-        dictionary[word] = True
 
 
 def find_word(word, word_index, row, col, value):
@@ -173,7 +164,7 @@ def start_find_word(word):
 
 
 def find_words():
-    for word in dictionary:
+    for word in dictionary.get_words():
         if len(word) <= 1:
             continue
         if len(word) > (board_size * board_size):
@@ -186,6 +177,5 @@ def print_results():
         print(word, value)
 
 
-hash_dictionary()
 find_words()
 print_results()

@@ -17,6 +17,11 @@ class Board:
     def get_piece_at_row_col(self, row, col):
         return self.board[row][col]
 
+    def for_each_piece(self, func):
+        for row_index, row in enumerate(self.board):
+            for piece_index, piece in enumerate(row):
+                func(piece, row_index, piece_index)
+
     def print_board(self):
         for row in self.board:
             for piece in row:

@@ -21,18 +21,12 @@ class WordFinder:
         return self.results
 
     def __start_find_word(self, word):
-        for row in range(0, board_size):
-            for col in range(0, board_size):
-                piece = self.board.get_piece_at_row_col(row, col)
-                if piece.letter == word[0]:
-                    # print("Find word " + word)
-                    self.__find_word(
-                        word,
-                        0,
-                        row,
-                        col,
-                        0,
-                    )
+        find_word = (
+            lambda piece, row, col: self.__find_word(word, 0, row, col, 0)
+            if piece.letter == word[0]
+            else None
+        )
+        self.board.for_each_piece(find_word)
 
     def __find_word(self, word, word_index, row, col, value):
         curr_letter = word[word_index]

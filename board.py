@@ -1,16 +1,20 @@
 from piece import Piece
 
+board_size = 4
+
 
 class Board:
     def __init__(self):
         self.board = []
-        self.__create_debug_board()
-        # print("Insert board line by line")
-        # for i in range (0, board_size):
-        #   line = input().split()
-        #   for j in range (0, board_size):
-        #     p = Piece(line[j], 1)
-        #     board[i].append(p)
+        for i in range(0, board_size):
+            self.board.append([])
+        # self.__create_debug_board()
+        print("Insert board line by line")
+        for i in range(0, board_size):
+            line = input().split()
+            for j in range(0, board_size):
+                p = Piece(line[j])
+                self.board[i].append(p)
 
         self.print_board()
 
@@ -33,9 +37,6 @@ class Board:
         self.board[row][col] = item
 
     def __create_debug_board(self):
-        for i in range(0, 4):
-            self.board.append([])
-
         self.board[0].append(Piece("h"))
         self.board[0].append(Piece("e"))
         self.board[0].append(Piece("l"))
